@@ -37,4 +37,9 @@ public class BookController {
                 ResponseEntity.notFound().build()
         );
     }
+
+    @GetMapping(path = "/search/{id}")
+    public BookDto getBookById(@PathVariable Long id) {
+        return service.getBookById(id);
+    }
 }

@@ -53,4 +53,14 @@ public class BookServiceImpl implements BookService {
         }
         return false;
     }
+
+    @Override
+    public BookDto getBookById(Long id) {
+        Optional<Book> optional = repository.findById(id);
+
+        if (optional.isPresent()) {
+            return mapper.convertValue(optional, BookDto.class);
+        }
+        return null;
+    }
 }
