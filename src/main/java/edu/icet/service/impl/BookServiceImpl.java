@@ -13,10 +13,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-//    @Autowired
     final BookRepository repository;
-
-//    @Autowired
+    
     final ObjectMapper mapper;
 
     @Override
