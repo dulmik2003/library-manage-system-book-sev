@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +41,16 @@ public class BookServiceImpl implements BookService {
             bookList.add(dto);
         }
         return bookList;
+    }
+
+    @Override
+    public boolean deleteBook(Long id) {
+        Optional<Book> optional = repository.findById(id);
+
+        if (optional.isPresent()) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

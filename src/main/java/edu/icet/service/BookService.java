@@ -10,4 +10,6 @@ public interface BookService {
     void addBook(BookDto dto);
 
     List<BookDto> getBooks();
+
+    boolean deleteBook(Long id);
 }
