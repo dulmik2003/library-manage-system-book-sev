@@ -9,19 +9,60 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-//    @Autowired
     final BookRepository repository;
-
-//    @Autowired
+    
     final ObjectMapper mapper;
 
     @Override
-    public void addBook(BookDto dto) {
-        Book book = mapper.convertValue(dto, Book.class);
-        repository.save(book);
+    public BookDto addBook(BookDto dto) {
+        Book pushEntity = mapper.convertValue(dto, Book.class);
+
+        Book pullentity = repository.save(pushEntity);
+        return mapper.convertValue(pullentity, BookDto.class);
+    }
+
+    @Override
+    public List<BookDto> getBooks() {
+        List<BookDto> bookList = new ArrayList<>();
+
+        Iterable<Book> iterable = repository.findAll();
+        Iterator<Book> iterator = iterable.iterator();
+
+        while (iterator.hasNext()) {
+            Book entity = iterator.next();
+            BookDto dto = mapper.convertValue(entity, BookDto.class);
+            bookList.add(dto);
+        }
+        return bookList;
+    }
+
+    @Override
+    public boolean deleteBook(Long id) {
+        Optional<Book> optional = repository.findById(id);
+
+        if (optional.isPresent()) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public BookDto getBookById(Long id) {
+        Optional<Book> optional = repository.findById(id);
+
+        if (optional.isPresent()) {
+            return mapper.convertValue(optional, BookDto.class);
+        }
+        return null;
     }
 }
