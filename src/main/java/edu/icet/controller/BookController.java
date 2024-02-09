@@ -3,13 +3,14 @@ package edu.icet.controller;
 import edu.icet.dto.BookDto;
 import edu.icet.service.impl.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "/book")
 @RequiredArgsConstructor
@@ -19,23 +20,24 @@ public class BookController {
 
     @PostMapping(path = "/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addBook(@RequestBody BookDto dto) {
-        service.addBook(dto);
+    public BookDto addBook(@RequestBody BookDto dto) {
+        return service.addBook(dto);
     }
 
-    @GetMapping(path = "/get")
-    @ResponseStatus(HttpStatus.FOUND)
+    @GetMapping(path = "/get-all")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public List<BookDto> getBooks() {
         return service.getBooks();
     }
 
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity deleteBook(@PathVariable Long id) {
-        return (service.deleteBook(id)) ? (
-                ResponseEntity.ok("Deleted")
-        ) : (
-                ResponseEntity.notFound().build()
-        );
+    public Map deleteBook(@PathVariable Long id) {
+        boolean isDeleted = service.deleteBook(id);
+
+        if (isDeleted) {
+            return Collections.singletonMap("status", "Sucessfully Deleted");
+        }
+        return Collections.singletonMap("status", "Failed");
     }
 
     @GetMapping(path = "/search/{id}")

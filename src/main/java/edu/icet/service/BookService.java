@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public interface BookService {
-    void addBook(BookDto dto);
+    BookDto addBook(BookDto dto);
 
     List<BookDto> getBooks();
 

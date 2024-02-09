@@ -23,9 +23,11 @@ public class BookServiceImpl implements BookService {
     final ObjectMapper mapper;
 
     @Override
-    public void addBook(BookDto dto) {
-        Book book = mapper.convertValue(dto, Book.class);
-        repository.save(book);
+    public BookDto addBook(BookDto dto) {
+        Book pushEntity = mapper.convertValue(dto, Book.class);
+
+        Book pullentity = repository.save(pushEntity);
+        return mapper.convertValue(pullentity, BookDto.class);
     }
 
     @Override
